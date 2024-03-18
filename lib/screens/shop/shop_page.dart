@@ -11,25 +11,25 @@ class _ShopPageState extends State<ShopPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.orange[800],
-        leading: IconButton(
-          onPressed: () {},
-          icon: Icon(
-            Icons.line_weight,
-            color: Colors.white,
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.notifications,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.orange[800],
+      //   leading: IconButton(
+      //     onPressed: () {},
+      //     icon: Icon(
+      //       Icons.line_weight,
+      //       color: Colors.white,
+      //     ),
+      //   ),
+      //   actions: [
+      //     IconButton(
+      //       onPressed: () {},
+      //       icon: Icon(
+      //         Icons.notifications,
+      //         color: Colors.white,
+      //       ),
+      //     ),
+      //   ],
+      // ),
       body: Container(
         padding: EdgeInsets.all(20),
         child: SingleChildScrollView(

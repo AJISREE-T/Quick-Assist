@@ -5,6 +5,7 @@ import 'package:quickassist/models/user_model.dart';
 import 'package:quickassist/screens/home_page.dart';
 import 'package:quickassist/screens/login_page.dart';
 import 'package:quickassist/services/auth_service.dart';
+import 'package:quickassist/services/authe_view_model.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({Key? key}) : super(key: key);
@@ -94,7 +95,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     if (value!.isEmpty) {
                       return 'Enter Full Name';
                     }
-
                   },
                   cursorColor: Colors.orange[800],
                   decoration: InputDecoration(
@@ -232,42 +232,63 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 ),
                 InkWell(
                   onTap: () async {
-                    if (_registerkey.currentState!.validate())  {
-                     UserCredential userData= await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                          email: _emailController.text.trim(),
-                          password: _passController.text.trim());
-                     if(userData!=null){
+                    if (_registerkey.currentState!.validate()) {
+                      UserModel user = UserModel(
+                        name: _nameController.text,
+                        email: _emailController.text,
+                        password: _passController.text,
+                        phone: _phoneController.text,
+                        role: role!.toLowerCase(),
+                      );
 
+                    AuthServiewViewModel _authView=AuthServiewViewModel();
+                      final res = await _authView.registerUser(user);
 
-                       FirebaseFirestore.instance.collection('users').doc(userData.user!.uid).set({
+                      if (res == true) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()));
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Some errro")));
+                      }
 
-                         'uid':userData.user!.uid,
-                         'email':userData.user!.email,
-                         'name':_nameController.text,
-                         'address':_addressController.text,
-                         'phone':_phoneController.text,
-                         'role':role,
-                         'status':1
-
-                       }).then((value) => Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage())));
-                     }
-
-                      // _userModel = UserModel(
-                      //   email: _emailController.text,
-                      //   password: _passController.text,
-                      //   name: _nameController.text,
-                      //   phone: _phoneController.toString(),
-                      //   address: _addressController.text,
-                      //   status: 1,
-                      // );
-                      // final userdata =
-                      //     await _authService.registerUser(_userModel);
-                      // if (userdata != null) {
-                      //   Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //           builder: (context) => HomePage()));
+                      // UserCredential userData= await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                      //      email: _emailController.text.trim(),
+                      //      password: _passController.text.trim());
+                      // if(userData!=null){
+                      //
+                      //
+                      //   FirebaseFirestore.instance.collection('users').doc(userData.user!.uid).set({
+                      //
+                      //     'uid':userData.user!.uid,
+                      //     'email':userData.user!.email,
+                      //     'name':_nameController.text,
+                      //     'address':_addressController.text,
+                      //     'phone':_phoneController.text,
+                      //     'role':role,
+                      //     'status':1
+                      //
+                      //   }).then((value) => Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage())));
                       // }
+                      //
+                      //  // _userModel = UserModel(
+                      //  //   email: _emailController.text,
+                      //  //   password: _passController.text,
+                      //  //   name: _nameController.text,
+                      //  //   phone: _phoneController.toString(),
+                      //  //   address: _addressController.text,
+                      //  //   status: 1,
+                      //  // );
+                      //  // final userdata =
+                      //  //     await _authService.registerUser(_userModel);
+                      //  // if (userdata != null) {
+                      //  //   Navigator.push(
+                      //  //       context,
+                      //  //       MaterialPageRoute(
+                      //  //           builder: (context) => HomePage()));
+                      //  // }
                     }
                   },
                   child: Container(

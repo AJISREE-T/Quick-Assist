@@ -131,73 +131,79 @@ class _LoginPageState extends State<LoginPage> {
                   InkWell(
                     onTap: () async{
                       if (_loginkey.currentState!.validate()) {
-                        try {
-                          // Check if the provided credentials are for an admin
-                          if (_emailController.text == "admin@gmail.com" &&
-                              _passController.text == '12345678') {
-                            // If so, navigate to the admin page
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => AdminPage(),
-                              ),
-                            );
-                            return; // Exit early to prevent further login attempts
-                          }
 
-                          // If not admin, proceed with regular user login
-                          UserCredential userCredential =
-                          await FirebaseAuth.instance.signInWithEmailAndPassword(
-                            email: _emailController.text,
-                            password: _passController.text,
-                          );
 
-                          if (userCredential.user != null) {
-                            DocumentSnapshot userDoc = await FirebaseFirestore.instance
-                                .collection('users')
-                                .doc(userCredential.user!.uid)
-                                .get();
+                        AuthService _auth=AuthService();
+                        await _auth.login(_emailController.text, _passController.text).then((value) => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomePage()), (route) => false));
 
-                            if (userDoc.exists) {
-                              String role = userDoc['role'] ?? ''; // Fetch the user's role
-                              if (role == 'User') {
-                                // If the user is a regular user, navigate to the user's home page
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => HomePage(),
-                                  ),
-                                );
-                              } else if (role == 'Shop') {
-                                // If the user is a shop owner, navigate to the shop owner's home page
-                                // Replace ShopHomePage with the actual page for shop owners
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ShopPage(),
-                                  ),
-                                );
-                              } else {
-                                // If the role is not defined or recognized, handle it accordingly
-                                print('Unknown role: $role');
-                                // Optionally, you can display an error message to the user
-                              }
-                            } else {
-                              // If the user document doesn't exist, handle it accordingly
-                              print('User document does not exist');
-                              // Optionally, you can display an error message to the user
-                            }
-                          } else {
-                            // If userCredential.user is null, handle it accordingly
-                            print('User is null');
-                            // Optionally, you can display an error message to the user
-                          }
-                        } catch (e) {
-                          print('Error signing in: $e');
-                          // Handle the error during sign-in process
-                          // Optionally, you can display an error message to the user
-                        }
                       }
+                      //   try {
+                      //     // Check if the provided credentials are for an admin
+                      //     if (_emailController.text == "admin@gmail.com" &&
+                      //         _passController.text == '12345678') {
+                      //       // If so, navigate to the admin page
+                      //       Navigator.push(
+                      //         context,
+                      //         MaterialPageRoute(
+                      //           builder: (context) => AdminPage(),
+                      //         ),
+                      //       );
+                      //       return; // Exit early to prevent further login attempts
+                      //     }
+                      //
+                      //     // If not admin, proceed with regular user login
+                      //     UserCredential userCredential =
+                      //     await FirebaseAuth.instance.signInWithEmailAndPassword(
+                      //       email: _emailController.text,
+                      //       password: _passController.text,
+                      //     );
+                      //
+                      //     if (userCredential.user != null) {
+                      //       DocumentSnapshot userDoc = await FirebaseFirestore.instance
+                      //           .collection('users')
+                      //           .doc(userCredential.user!.uid)
+                      //           .get();
+                      //
+                      //       if (userDoc.exists) {
+                      //         String role = userDoc['role'] ?? ''; // Fetch the user's role
+                      //         if (role == 'User') {
+                      //           // If the user is a regular user, navigate to the user's home page
+                      //           Navigator.push(
+                      //                       //             context,
+                      //                       //             MaterialPageRoute(
+                      //                       //               builder: (context) => HomePage(),
+                      //                       //             ),
+                      //                       //           );
+                      //         } else if (role == 'Shop') {
+                      //           // If the user is a shop owner, navigate to the shop owner's home page
+                      //           // Replace ShopHomePage with the actual page for shop owners
+                      //           Navigator.push(
+                      //             context,
+                      //             MaterialPageRoute(
+                      //               builder: (context) => ShopPage(),
+                      //             ),
+                      //           );
+                      //         } else {
+                      //           // If the role is not defined or recognized, handle it accordingly
+                      //           print('Unknown role: $role');
+                      //           // Optionally, you can display an error message to the user
+                      //         }
+                      //       } else {
+                      //         // If the user document doesn't exist, handle it accordingly
+                      //         print('User document does not exist');
+                      //         // Optionally, you can display an error message to the user
+                      //       }
+                      //     } else {
+                      //       // If userCredential.user is null, handle it accordingly
+                      //       print('User is null');
+                      //       // Optionally, you can display an error message to the user
+                      //     }
+                      //   } catch (e) {
+                      //     print('Error signing in: $e');
+                      //     // Handle the error during sign-in process
+                      //     // Optionally, you can display an error message to the user
+                      //   }
+                      // }
                     },
 
 

@@ -1,7 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:quickassist/screens/home_page.dart';
 import 'package:quickassist/screens/login_page.dart';
+import 'package:quickassist/screens/shop/shop_page.dart';
+import 'package:quickassist/services/auth_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -11,6 +15,39 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+
+
+  bool logined=false;
+
+  checkLoginStatus()async{
+
+    SharedPreferences _pref=await SharedPreferences.getInstance();
+    var type=_pref.getString('role');
+    logined =await AuthService().checkLogin();
+
+    if(logined){
+
+      if(type=="user"){
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomePage()), (route) => false);
+      }
+
+      else if(
+      type =="shop"
+      ){
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>ShopPage()), (route) => false);
+      }
+
+    }
+
+
+  }
+
+  @override
+  void initState() {
+    checkLoginStatus();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
